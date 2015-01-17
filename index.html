@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>Parametric Curve Generator</title>
+	<link href="//fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css">
+	<link rel="stylesheet" href="/css/normalize.css">
+	<link rel="stylesheet" href="/css/skeleton.css">
+	<link rel="stylesheet" href="/css/styles.css">
+	
+	<script src="/js/math.js"></script>
+	<script src="/js/numeric-1.2.6.js"></script>
+	<script src="/js/jquery-2.1.1.js"></script>
+	<script src="/js/jquery-ui.js"></script>
+	<script src="/js/three.min.js"></script>
+	<script src="/js/fft.js"></script>
+	<script src="/js/script.js"></script>
+</head>
+
+<body>
+		<div class="container">
+			<h2 class="centered">Transform any complex curve to a trigonometric series!</h2>
+			<p class="centered">Draw the curve here</p>
+			<div id="scene"></div>
+			<div id="control">
+				<p>Click with left mouse button to add curve control points.
+				Drag with mouse middle button to turn camera (z-axis: time)</p>
+				<input type="checkbox" name="splineOn" value="Spline" id="splineOn" checked>
+				<label for="splineOn">Spline interpolation on (makes the curve more continuous, reduces Gibbs' phenomenon)</label>
+				<span id="nlabel">N</span>
+				<div id="slider"></div>
+				<button class="button button-primary" id="start">Do Fourier transform</button>
+				<button class="button" id="clear">Clear</button>
+			</div>
+			<p>Parametric formula:</p>
+			<textarea rows="20" cols="80" id="formula">
+			</textarea>
+			
+		</div>
+</body>
+
+</html>
