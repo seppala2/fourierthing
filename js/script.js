@@ -82,6 +82,10 @@ $(function() {
 		freq.scene.clear();
 	});
 	
+	$('#splineOn').change(function() {
+		freq.scene.splineObj.visible = $(this).is(':checked');
+	});
+	
 	document.addEventListener('touchstart', function(e) {
 		if (e.touches.length < 2) {
 			//e.preventDefault();
@@ -189,6 +193,8 @@ freq.Scene = function() {
 	this.camera.position.z = 5;
 	
 	this.init();
+	this.initPoints();
+	this.initSpline();
 
 
 };
@@ -205,16 +211,21 @@ freq.Scene.prototype = {
 		this.scene = new THREE.Scene();
 	
 		this.initAxes();
-		this.initPoints();
-		this.initSpline();
 		this.updateTimeStamp();
 	},
 	
 	clear: function() {
+		this.initPoints();
+		this.initSpline();
 		this.bugFix = false;
 		this.addPoint(math.complex(0,0));
 		this.nums = [];
 		this.init();
+		this.scene.add(this.splineObj);
+		if (!$("#splineOn").is(":checked")) {
+			this.splineObj.visible = false;
+		}
+		this.scene.add(this.points);
 	},
 
 	render: function render() {
@@ -294,6 +305,11 @@ freq.Scene.prototype = {
 	
 	start: function() {
 		this.init();
+		this.scene.add(this.splineObj);
+		if (!$("#splineOn").is(":checked")) {
+			this.splineObj.visible = false;
+		}
+		this.scene.add(this.points);
 		var geom = this.points.geometry;
 		for (var i = 0; i < this.nums.length; i++) {
 			geom.vertices[i].z /= this.nums.length;
@@ -346,8 +362,8 @@ freq.Scene.prototype = {
 		$("#formula").text(this.formula);
 		
 		this.updateTimeStamp();
-		this.scene.remove(this.points);
-		this.scene.remove(this.splineObj);
+		//this.scene.remove(this.points);
+		//this.scene.remove(this.splineObj);
 		this.hasStarted = true;
 		this.startDrawing();
 	},
@@ -387,9 +403,8 @@ freq.Scene.prototype = {
 		});
 		this.splineObj = new THREE.Line(geom, material);
 		this.splineObj.dynamic = true;
-		if (!freq.AUTOSTART) {
-			this.scene.add(this.splineObj);
-		}
+		this.scene.add(this.splineObj);
+		
 	},
 	
 	updateTimeStamp: function() {
@@ -413,7 +428,7 @@ freq.Scene.prototype = {
 			}
 		}
 		if (this.isDrawing) {
-			this.phasors[0].circle.position.setZ(-this.t + this.tStep);
+			this.phasors[0].circle.position.setZ(-this.t);
 			this.timeSinceLastTrajectory += diff;
 			var d = this.timeSinceLastTrajectory - this.trajectoryInterval;
 			if (d >= 0.0) {
