@@ -23,8 +23,8 @@ function relMouseCoords(event, element){
     }
     while(currentElement = currentElement.offsetParent)
 
-    canvasX = event.pageX - totalOffsetX;
-    canvasY = event.pageY - totalOffsetY;
+    canvasX = event.clientX - totalOffsetX;
+    canvasY = event.clientY - totalOffsetY;
 
     return {x:canvasX/element.clientHeight, y:canvasY/element.clientWidth}
 }
